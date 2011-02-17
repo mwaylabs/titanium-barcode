@@ -1,0 +1,16 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 0.1
+description: Barcode module
+author: M-WAY Solutions GmbH
+license: Apache v2 license
+copyright: Copyright (c) 2011 M-WAY Solutions GmbH
+
+# these should not be edited
+name: titanium-barcode
+moduleid: com.mwaysolutions.barcode
+guid: bc88d841-a015-45a8-8d95-31a4fa924c35
+platform: android
+minsdk: 1.5.1
