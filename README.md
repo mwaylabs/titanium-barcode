@@ -1,6 +1,8 @@
 Barcode Scanner For Appcelerator Titanium
 =========================================
 
+This is a small barcode scanner module you can use together with [Titanium Appcelerator](http://appcelerator.com) on an Android device.
+
 Build prerequisites
 -------------------
 
@@ -41,6 +43,22 @@ Use the module
 - Add the module to the module section of your tiapp.xml file: <modules><module version="0.1">com.mwaysolutions.barcode</module></modules>
 - Use it in your application with require('com.mwaysolutions.barcode');
 - Build your project as usual with the Titanium Developer application
+
+
+The Scanner looks strange on devices with a high resolution screen?!
+--------------------------------------------------------------------
+
+If the layout of the scanner activity is not centered, add the following entry to your tiapp.xml:
+
+    <android xmlns:android="http://schemas.android.com/apk/res/android">
+        <manifest>
+          <supports-screens
+            android:smallScreens="true"
+            android:normalScreens="true"
+            android:largeScreens="true"
+            android:anyDensity="true" />
+        </manifest>
+    </android>
 
 
 Code Example
