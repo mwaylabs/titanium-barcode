@@ -6,6 +6,7 @@ Build prerequisites
 
 To build the module, there are some dependencies which need to be fulfilled:
 
+- Git
 - Titanium Mobile SDK 1.5.0 or above
 - Python >= 2.5
 - Sun Java SDK 6.0
@@ -20,11 +21,17 @@ To build the module, you need to clone our git repository and build the sources 
 
     # clone the repository
     git clone https://github.com/mwaylabs/titanium-barcode.git
-    cd tianium-barcode
+    cd titanium-barcode
     # run ant to build the module
     ant clean && ant
 
-The newly created *.jar and *.zip files can be found in the dist directory.
+If the build fails, make sure the entries in the buld.properies file point to the right path:
+
+    titanium.platform=/Library/Application Support/Titanium/mobilesdk/osx/1.5.1/android
+    android.platform=/opt/android-sdk/platforms/android-4
+    google.apis=/opt/android-sdk/add-ons/addon_google_apis_google_inc_4
+
+The newly created *.jar and *.zip files can be found in the dist directory. The module you need is called com.mwaysolutions.barcode-android-$VERSION.zip
 
 Use the module
 --------------
@@ -33,6 +40,7 @@ Use the module
 - Place it into your appcelerator project directory
 - Add the module to the module section of your tiapp.xml file: <modules><module version="0.1">com.mwaysolutions.barcode</module></modules>
 - Use it in your application with require('com.mwaysolutions.barcode');
+- Build your project as usual with the Titanium Developer application
 
 
 Code Example
