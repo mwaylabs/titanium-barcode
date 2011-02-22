@@ -30,7 +30,7 @@ import java.util.Vector;
 
 import org.appcelerator.titanium.util.Log;
 
-import com.mwaysolutions.barcode.BarcodeActivity;
+import com.mwaysolutions.barcode.TitaniumBarcodeActivity;
 import com.mwaysolutions.barcode.camera.CameraManager;
 import com.mwaysolutions.barcode.constants.Id;
 
@@ -43,7 +43,7 @@ import com.mwaysolutions.barcode.constants.Id;
  */
 
 public final class CaptureActivityHandler extends Handler {
-	private final BarcodeActivity activity;
+	private final TitaniumBarcodeActivity activity;
 	private final DecodeThread decodeThread;
 	private State state;
 
@@ -53,7 +53,7 @@ public final class CaptureActivityHandler extends Handler {
 		PREVIEW, SUCCESS, DONE
 	}
 
-	public CaptureActivityHandler(BarcodeActivity activity,
+	public CaptureActivityHandler(TitaniumBarcodeActivity activity,
 			Vector<BarcodeFormat> decodeFormats, String characterSet,
 			boolean beginScanning) {
 		this.activity = activity;

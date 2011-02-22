@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ti:module xmlns:ti="http://ti.appcelerator.org" xmlns:android="http://schemas.android.com/apk/res/android">
-	<!-- Similar to tiapp.xml, but contains module/platform specific configuration in <iphone> and <android>/<android:manifest> sections -->
+<ti:module xmlns:ti="http://ti.appcelerator.org"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<android xmlns:android="http://schemas.android.com/apk/res/android">
+		<manifest>
+			<uses-permission android:name="android.permission.CAMERA" />
+			<uses-permission android:name="android.permission.FLASHLIGHT" />
+
+			<supports-screens android:smallScreens="true"
+				android:normalScreens="true" android:largeScreens="true"
+				android:anyDensity="true" />
+
+			<application>
+				<activity android:name="com.mwaysolutions.barcode.TitaniumBarcodeActivity"
+					android:screenOrientation="landscape" android:configChanges="orientation|keyboardHidden"
+					android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+			</application>
+		</manifest>
+	</android>
+
 </ti:module>

@@ -61,7 +61,7 @@ import com.google.zxing.ResultPoint;
  * @author sven@roothausen.de(Sven Pfleiderer)
  */
 
-public final class BarcodeActivity extends Activity implements
+public final class TitaniumBarcodeActivity extends Activity implements
 		SurfaceHolder.Callback {
 
 	public static final String EXTRA_RESULT = "scanResult";

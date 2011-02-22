@@ -40,13 +40,13 @@ import android.content.Intent;
  */
 
 @Kroll.module(name="TitaniumBarcode", id="com.mwaysolutions.barcode")
-public class TitanimuBarcodeModule extends KrollModule {
+public class TitaniumBarcodeModule extends KrollModule {
 
-	private static final String LCAT = "TiBarcode";
+	private static final String LCAT = "TitaniumBarcodeModule";
 	private static final boolean DBG = true; // TiConfig.LOGD;
 	protected static final int UNKNOWN_ERROR = 0;
 
-	public TitanimuBarcodeModule(final TiContext context) {
+	public TitaniumBarcodeModule(final TiContext context) {
 		super(context);
 	}
 
@@ -75,7 +75,7 @@ public class TitanimuBarcodeModule extends KrollModule {
 		final int resultCode = activitySupport.getUniqueResultCode();
 
 		final TiIntentWrapper scanIntent = new TiIntentWrapper(new Intent(
-				activity, BarcodeActivity.class));
+				activity, TitaniumBarcodeActivity.class));
 		scanIntent.setWindowId(TiIntentWrapper.createActivityName("SCANNER"));
 		final Intent intent = scanIntent.getIntent();
 
@@ -96,7 +96,7 @@ public class TitanimuBarcodeModule extends KrollModule {
 						} else {
 							logDebug("scan successful");
 							String result = data
-									.getStringExtra(BarcodeActivity.EXTRA_RESULT);
+									.getStringExtra(TitaniumBarcodeActivity.EXTRA_RESULT);
 							logDebug("scan result: " + result);
 							successCallback.callAsync(getDictForResult(result));
 						}

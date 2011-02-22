@@ -19,7 +19,7 @@ package com.mwaysolutions.barcode.zxing;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import com.mwaysolutions.barcode.BarcodeActivity;
+import com.mwaysolutions.barcode.TitaniumBarcodeActivity;
 import com.mwaysolutions.barcode.camera.CameraManager;
 import com.mwaysolutions.barcode.constants.Id;
 
@@ -48,10 +48,10 @@ final class DecodeThread extends Thread {
 	private static final String TAG = "DecodeThread";
 
 	private Handler handler;
-	private final BarcodeActivity activity;
+	private final TitaniumBarcodeActivity activity;
 	private final MultiFormatReader multiFormatReader;
 
-	DecodeThread(BarcodeActivity activity, Vector<BarcodeFormat> decodeFormats,
+	DecodeThread(TitaniumBarcodeActivity activity, Vector<BarcodeFormat> decodeFormats,
 			String characterSet, ResultPointCallback resultPointCallback) {
 		this.activity = activity;
 		multiFormatReader = new MultiFormatReader();
@@ -60,7 +60,7 @@ final class DecodeThread extends Thread {
 
 		if (decodeFormats == null || decodeFormats.isEmpty()) {
 			hints.put(DecodeHintType.POSSIBLE_FORMATS,
-					BarcodeActivity.ALL_FORMATS);
+					TitaniumBarcodeActivity.ALL_FORMATS);
 		} else {
 			hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
 		}
