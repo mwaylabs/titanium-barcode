@@ -19,6 +19,7 @@
 package com.mwaysolutions.barcode;
 
 import org.appcelerator.kroll.KrollDict;
+import org.appcelerator.kroll.KrollInvocation;
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiContext;
@@ -39,7 +40,7 @@ import android.content.Intent;
  * 
  */
 
-@Kroll.module(name="TitaniumBarcode", id="com.mwaysolutions.barcode")
+@Kroll.module(name = "TitaniumBarcode", id = "com.mwaysolutions.barcode")
 public class TitaniumBarcodeModule extends KrollModule {
 
 	private static final String LCAT = "TitaniumBarcodeModule";
@@ -51,70 +52,31 @@ public class TitaniumBarcodeModule extends KrollModule {
 	}
 
 	@Kroll.method
-	public void scan(final Object[] args) {
+	public void scan(KrollInvocation invocation, KrollDict options) {
 		logDebug("scan() called");
-
-		final KrollDict options = (KrollDict) args[0];
 
 		final KrollCallback successCallback = getCallback(options, "success");
 		final KrollCallback cancelCallback = getCallback(options, "cancel");
 		final KrollCallback errorCallback = getCallback(options, "error");
 
-		launchScanActivity(successCallback, cancelCallback, errorCallback);
-		logDebug("scan() ended");
-	}
-
-	private void launchScanActivity(final KrollCallback successCallback,
-			final KrollCallback cancelCallback,
-			final KrollCallback errorCallback) {
-
 		logDebug("launchScanActivity() called");
 
-		final Activity activity = getTiContext().getActivity();
+		final Activity activity = invocation.getTiContext().getActivity();
 		final TiActivitySupport activitySupport = (TiActivitySupport) activity;
-		final int resultCode = activitySupport.getUniqueResultCode();
 
-		final TiIntentWrapper scanIntent = new TiIntentWrapper(new Intent(
+		final TiIntentWrapper barcodeIntent = new TiIntentWrapper(new Intent(
 				activity, TitaniumBarcodeActivity.class));
-		scanIntent.setWindowId(TiIntentWrapper.createActivityName("SCANNER"));
-		final Intent intent = scanIntent.getIntent();
+		barcodeIntent.setWindowId(TiIntentWrapper.createActivityName("SCANNER"));
 
-		activitySupport.launchActivityForResult(intent, resultCode,
-				new TiActivityResultHandler() {
+		BarcodeResultHandler resultHandler = new BarcodeResultHandler();
+		resultHandler.successCallback = successCallback;
+		resultHandler.cancelCallback = cancelCallback;
+		resultHandler.errorCallback = errorCallback;
+		resultHandler.activitySupport = activitySupport;
+		resultHandler.barcodeIntent = barcodeIntent.getIntent();
+		activity.runOnUiThread(resultHandler);
 
-					public void onResult(final Activity activity,
-							final int requestCode, final int resultCode,
-							final Intent data) {
-
-						logDebug("onResult() called");
-
-						if (resultCode == Activity.RESULT_CANCELED) {
-							logDebug("scan canceled");
-							if (cancelCallback != null) {
-								cancelCallback.callAsync();
-							}
-						} else {
-							logDebug("scan successful");
-							String result = data
-									.getStringExtra(TitaniumBarcodeActivity.EXTRA_RESULT);
-							logDebug("scan result: " + result);
-							successCallback.callAsync(getDictForResult(result));
-						}
-					}
-
-					public void onError(Activity activity, int requestCode,
-							Exception e) {
-						String msg = "Problem with scanner; " + e.getMessage();
-						logError("error: " + msg);
-						if (errorCallback != null) {
-							errorCallback.callAsync(createErrorResponse(
-									UNKNOWN_ERROR, msg));
-						}
-					}
-				});
-
-		logDebug("launchScanActivity() ended");
-
+		logDebug("scan() ended");
 	}
 
 	private KrollDict getDictForResult(final String result) {
@@ -141,4 +103,46 @@ public class TitaniumBarcodeModule extends KrollModule {
 			Log.d(LCAT, msg);
 		}
 	}
+
+	protected class BarcodeResultHandler implements TiActivityResultHandler,
+			Runnable {
+
+		protected int code;
+		protected KrollCallback successCallback, cancelCallback, errorCallback;
+		protected TiActivitySupport activitySupport;
+		protected Intent barcodeIntent;
+
+		public void run() {
+			code = activitySupport.getUniqueResultCode();
+			activitySupport.launchActivityForResult(barcodeIntent, code, this);
+		}
+
+		public void onError(Activity activity, int requestCode, Exception e) {
+			String msg = "Problem with scanner; " + e.getMessage();
+			logError("error: " + msg);
+			if (errorCallback != null) {
+				errorCallback
+						.callAsync(createErrorResponse(UNKNOWN_ERROR, msg));
+			}
+		}
+
+		public void onResult(Activity activity, int requestCode,
+				int resultCode, Intent data) {
+			logDebug("onResult() called");
+
+			if (resultCode == Activity.RESULT_CANCELED) {
+				logDebug("scan canceled");
+				if (cancelCallback != null) {
+					cancelCallback.callAsync();
+				}
+			} else {
+				logDebug("scan successful");
+				String result = data
+						.getStringExtra(TitaniumBarcodeActivity.EXTRA_RESULT);
+				logDebug("scan result: " + result);
+				successCallback.callAsync(getDictForResult(result));
+			}
+		}
+	}
+
 }

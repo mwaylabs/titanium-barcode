@@ -31,7 +31,6 @@ final class CameraConfigurationManager {
   private static final String TAG = CameraConfigurationManager.class.getSimpleName();
 
   private static final int TEN_DESIRED_ZOOM = 27;
-  private static final int DESIRED_SHARPNESS = 30;
 
   private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 
@@ -257,24 +256,4 @@ final class CameraConfigurationManager {
     }
   }
 
-  /*
-  private void setSharpness(Camera.Parameters parameters) {
-
-    int desiredSharpness = DESIRED_SHARPNESS;
-
-    String maxSharpnessString = parameters.get("sharpness-max");
-    if (maxSharpnessString != null) {
-      try {
-        int maxSharpness = Integer.parseInt(maxSharpnessString);
-        if (desiredSharpness > maxSharpness) {
-          desiredSharpness = maxSharpness;
-        }
-      } catch (NumberFormatException nfe) {
-        Log.w(TAG, "Bad sharpness-max: " + maxSharpnessString);
-      }
-    }
-
-    parameters.set("sharpness", desiredSharpness);
-  }
-   */
 }
