@@ -9,7 +9,7 @@ Build prerequisites
 To build the module, there are some dependencies which need to be fulfilled:
 
 - Git
-- Titanium Mobile SDK 1.5.0 or above
+- Titanium Mobile SDK 1.8.1 or above
 - Python >= 2.5
 - Sun Java SDK 6.0
 - Android SDK with Google APIs and SDK version 4 installed
@@ -29,7 +29,7 @@ To build the module, you need to clone our git repository and build the sources 
 
 If the build fails, make sure the entries in the buld.properies file point to the right path:
 
-    titanium.platform=/Library/Application Support/Titanium/mobilesdk/osx/1.5.1/android
+    titanium.platform=/Library/Application Support/Titanium/mobilesdk/osx/1.8.1/android
     android.platform=/opt/android-sdk/platforms/android-4
     google.apis=/opt/android-sdk/add-ons/addon_google_apis_google_inc_4
 

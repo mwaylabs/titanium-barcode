@@ -21,9 +21,11 @@ package com.mwaysolutions.barcode;
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollInvocation;
 import org.appcelerator.kroll.KrollModule;
+import org.appcelerator.kroll.KrollObject;
 import org.appcelerator.kroll.annotations.Kroll;
+import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiContext;
-import org.appcelerator.titanium.kroll.KrollCallback;
+import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.titanium.util.Log;
 import org.appcelerator.titanium.util.TiActivityResultHandler;
 import org.appcelerator.titanium.util.TiActivitySupport;
@@ -44,7 +46,7 @@ import android.content.Intent;
 public class TitaniumBarcodeModule extends KrollModule {
 
 	private static final String LCAT = "TitaniumBarcodeModule";
-	private static final boolean DBG = true; // TiConfig.LOGD;
+	private static final boolean DBG = true; 
 	protected static final int UNKNOWN_ERROR = 0;
 
 	public TitaniumBarcodeModule(final TiContext context) {
@@ -52,16 +54,17 @@ public class TitaniumBarcodeModule extends KrollModule {
 	}
 
 	@Kroll.method
-	public void scan(KrollInvocation invocation, KrollDict options) {
+	public void scan(KrollDict options) {
 		logDebug("scan() called");
-
-		final KrollCallback successCallback = getCallback(options, "success");
-		final KrollCallback cancelCallback = getCallback(options, "cancel");
-		final KrollCallback errorCallback = getCallback(options, "error");
+		
+		final KrollFunction successCallback = getCallback(options, "success");
+		final KrollFunction cancelCallback = getCallback(options, "cancel");
+		final KrollFunction errorCallback = getCallback(options, "error");
 
 		logDebug("launchScanActivity() called");
+		
 
-		final Activity activity = invocation.getTiContext().getActivity();
+		final Activity activity = TiApplication.getAppCurrentActivity();
 		final TiActivitySupport activitySupport = (TiActivitySupport) activity;
 
 		final TiIntentWrapper barcodeIntent = new TiIntentWrapper(new Intent(
@@ -85,9 +88,9 @@ public class TitaniumBarcodeModule extends KrollModule {
 		return dict;
 	}
 
-	private KrollCallback getCallback(final KrollDict options, final String name) {
+	private KrollFunction getCallback(final KrollDict options, final String name) {
 		if (options.containsKey(name)) {
-			return (KrollCallback) options.get(name);
+			return (KrollFunction) options.get(name);
 		} else {
 			logError("Callback not found: " + name);
 			return null;
@@ -108,7 +111,7 @@ public class TitaniumBarcodeModule extends KrollModule {
 			Runnable {
 
 		protected int code;
-		protected KrollCallback successCallback, cancelCallback, errorCallback;
+		protected KrollFunction successCallback, cancelCallback, errorCallback;
 		protected TiActivitySupport activitySupport;
 		protected Intent barcodeIntent;
 
@@ -119,10 +122,10 @@ public class TitaniumBarcodeModule extends KrollModule {
 
 		public void onError(Activity activity, int requestCode, Exception e) {
 			String msg = "Problem with scanner; " + e.getMessage();
-			logError("error: " + msg);
+			logError("error: " + msg); 
 			if (errorCallback != null) {
 				errorCallback
-						.callAsync(createErrorResponse(UNKNOWN_ERROR, msg));
+						.callAsync((KrollObject)errorCallback,createErrorResponse(UNKNOWN_ERROR, msg));
 			}
 		}
 
@@ -133,14 +136,14 @@ public class TitaniumBarcodeModule extends KrollModule {
 			if (resultCode == Activity.RESULT_CANCELED) {
 				logDebug("scan canceled");
 				if (cancelCallback != null) {
-					cancelCallback.callAsync();
+					cancelCallback.callAsync((KrollObject)cancelCallback,new KrollDict());
 				}
 			} else {
 				logDebug("scan successful");
 				String result = data
 						.getStringExtra(TitaniumBarcodeActivity.EXTRA_RESULT);
 				logDebug("scan result: " + result);
-				successCallback.callAsync(getDictForResult(result));
+				successCallback.callAsync((KrollObject)successCallback,getDictForResult(result));
 			}
 		}
 	}
