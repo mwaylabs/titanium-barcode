@@ -40,7 +40,7 @@ Use the module
 
 - Build the module or download is from the download section
 - Place it into your appcelerator project directory
-- Add the module to the module section of your tiapp.xml file: <modules><module version="0.2">com.mwaysolutions.barcode</module></modules>
+- Add the module to the module section of your tiapp.xml file: <modules><module version="0.3">com.mwaysolutions.barcode</module></modules>
 - Use it in your application with require('com.mwaysolutions.barcode');
 - Build your project as usual with the Titanium Developer application
 
