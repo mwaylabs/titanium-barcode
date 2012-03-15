@@ -1,4 +1,4 @@
-<project name="titanium-barcode" default="dist">
+<project name="barcode" default="dist">
 	<description>
 		Ant build script for Titanium Android module titanium-barcode
 	</description>
